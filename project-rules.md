@@ -108,24 +108,30 @@ export function useFormContext() // = useContext(FormContext); ném lỗi rõ r�
 
 ### Client – `useForumMessages.js` (slide 26)
 
-`export const useForumMessages = (forumId) => ({ data, loading, postMessage })`
+`export const useForumMessages = (forumId) => ({ data, loading, error, postMessage })`
 
-- Trong `useEffect([forumId])`: tạo `AbortController`, `fetch(..., { signal })` bằng async/await trong `try/catch/finally`.
-- Mọi `setState` (data, lỗi, `loading`) chỉ chạy khi `!controller.signal.aborted` → đổi kênh nhanh thì response cũ không ghi đè kênh mới.
+- Trong `useEffect([forumId, reloadKey])`: tạo `AbortController`, `fetch('/api/messages/' + encodeURIComponent(forumId), { signal })` bằng async/await trong `try/catch`.
+- `setState` chỉ chạy khi `!controller.signal.aborted` → đổi kênh nhanh thì response (hoặc lỗi) của kênh cũ không ghi đè kênh mới; `AbortError` không bị coi là lỗi.
 - Cleanup: `return () => controller.abort();`.
-- `postMessage(payload)`: POST lên server rồi refetch kênh hiện tại.
+- Kết quả lưu kèm `forumId`/`reloadKey` mà nó thuộc về; `loading` và `data` **suy ra trong render** → vừa đổi kênh là `data = []`, `loading = true`, không bao giờ hiện tin của kênh trước.
+- HTTP lỗi → `error` = `body.error` của server (hoặc `HTTP <status>`).
+- `postMessage(payload)`: POST JSON lên kênh hiện tại; lỗi → reject với message của server; thành công → tăng `reloadKey` để refetch, trả message vừa tạo. Trong lúc refetch vẫn giữ data cũ của cùng kênh.
 
 ### Client – trang chuyển kênh (slide 16–17)
 
-- Chuyển giữa `nasa` / `esports-tribunal` / `notNasa`.
-- Danh sách message render bằng `<dl>` với `<React.Fragment key={msg.id}>` bọc mỗi cặp `<dt>`/`<dd>`.
-- Kiểm tra thủ công: DevTools → Network → Slow 3G, đổi kênh liên tục, request cũ hiện `(canceled)`. Ghi cách làm vào README.
+- Route `/forum/:forumId` (`/forum` → `/forum/nasa`); link "Forum" trên nav chính.
+- `nav[aria-label="Kênh"]` gồm 3 `NavLink` (`active-link` / `link`). Kênh không thuộc 3 kênh → `role="alert"` "404: Kênh không tồn tại", không gọi API.
+- Vùng tin nhắn là `section` có `aria-busy={loading}`; đang tải → `role="status"`, lỗi → `role="alert"`, rỗng → "Chưa có tin nhắn nào.".
+- Danh sách render bằng `<dl className="message-list">` với `<React.Fragment key={msg.id}>` bọc mỗi cặp `<dt>` (author + `<time dateTime>`) / `<dd>` (text).
+- Form gửi tin dùng lại `InputField` (Tên, Nội dung), validate trong render giống server (trim, bắt buộc); đang gửi thì nút "Đang gửi…" bị disable; thành công xoá nội dung, giữ tên; lỗi server hiện `role="alert"`.
+- Kiểm tra thủ công Slow 3G: xem [README](README.md#kiểm-tra-hủy-request-bằng-slow-3g-sprint-3).
 
 ## 6. Khác với slide (có chủ đích)
 
 | Slide | Repo | Lý do |
 |---|---|---|
 | Slide 26 fetch `/api/forums/${forumId}/messages`, slide 16 fetch `/api/channels/${channelId}/messages` | Client fetch `/api/messages/${forumId}` | Phải khớp route server ở slide 27; 2 URL trong slide 16/26 không có trên server. |
+| Slide 26 `try/catch/finally` với `setLoading(false)` trong `finally` | `loading` suy ra trong render từ kết quả đã lưu, không có state `loading` riêng | Tránh `setLoading(true)` đồng bộ đầu effect và tránh hiện data kênh cũ trong lúc tải kênh mới. Guard `signal.aborted` giữ nguyên. |
 | Slide 27 `cors({ origin: 'http://localhost:5173' })` | `origin` đọc từ `CORS_ORIGIN` | Không hardcode config (slide 5, 29). |
 | Slide 27 `{ id: crypto.randomUUID(), ...req.body, timestamp }` | Chỉ lấy `text`, `author` từ body; `id`, `timestamp` do server đặt | Với spread, client gửi `id`/`timestamp` trong body sẽ ghi đè giá trị server sinh ra. |
 | Slide 27 đọc `req.body.text` trực tiếp | `parseMessageInput(req.body)` chịu được `req.body === undefined` | Express 5 để `req.body` là `undefined` khi không có body → code slide trả **500** (đã kiểm chứng). |

@@ -3,6 +3,8 @@ import { Routes, Route, Navigate, NavLink } from 'react-router';
 import PeopleLayout from './people/PeopleLayout.jsx';
 import PersonDetailSkeleton from './people/PersonDetailSkeleton.jsx';
 import { SimpleForm } from './form/SimpleForm.jsx';
+import ForumPage from './forum/ForumPage.jsx';
+import { FORUMS } from './forum/forums.js';
 import { people } from './data/people.js';
 import './App.css';
 
@@ -19,6 +21,7 @@ export default function App() {
         <nav className="main-nav" aria-label="Main">
           <NavLink to="/people" className={navClass}>People</NavLink>
           <NavLink to="/form" className={navClass}>Form</NavLink>
+          <NavLink to="/forum" className={navClass}>Forum</NavLink>
         </nav>
       </header>
       <Routes>
@@ -42,6 +45,10 @@ export default function App() {
             </main>
           }
         />
+        <Route path="forum">
+          <Route index element={<Navigate to={`/forum/${FORUMS[0]}`} replace />} />
+          <Route path=":forumId" element={<ForumPage />} />
+        </Route>
       </Routes>
     </>
   );

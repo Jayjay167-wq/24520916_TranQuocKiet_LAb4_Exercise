@@ -31,7 +31,7 @@ Quy trình mỗi task: Contract → Fail test → Implement → Refactor. Mỗi 
 - [x] **T3.1** Express server: CORS, GET/POST `/api/messages/:forum`, POST thiếu field → 400, hợp lệ → 201 (`crypto.randomUUID()`), config từ env
   - Done khi: test 200/400/201 pass
   - Commit: `feat: express messages api`
-- [ ] **T3.2** Hook `useForumMessages` (AbortController) + trang chuyển kênh `nasa` / `esports-tribunal` / `notNasa`
+- [x] **T3.2** Hook `useForumMessages` (AbortController) + trang chuyển kênh `nasa` / `esports-tribunal` / `notNasa`
   - Done khi: test đổi kênh nhanh hủy request cũ, kiểm tra Slow 3G ghi trong README
   - Commit: `feat: forum messages hook and channel switcher`
 
