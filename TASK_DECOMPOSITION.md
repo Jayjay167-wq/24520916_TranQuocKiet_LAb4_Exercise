@@ -36,5 +36,5 @@ Quy trình mỗi task: Contract → Fail test → Implement → Refactor. Mỗi 
   - Commit: `feat: forum messages hook and channel switcher`
 
 ## Phase 4 – Audit
-- [ ] **T4.1** `AI_FAILURE_AUDIT.md`, chạy lại toàn bộ test + build
+- [x] **T4.1** `AI_FAILURE_AUDIT.md`, chạy lại toàn bộ test + build
   - Commit: `docs: ai failure audit`
