@@ -1,16 +1,26 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router';
+import { Routes, Route, Navigate, NavLink } from 'react-router';
 import PeopleLayout from './people/PeopleLayout.jsx';
 import PersonDetailSkeleton from './people/PersonDetailSkeleton.jsx';
+import { SimpleForm } from './form/SimpleForm.jsx';
 import { people } from './data/people.js';
+import './App.css';
 
 // Route-level code splitting: the detail view ships as its own chunk.
 const PersonDetail = lazy(() => import('./people/PersonDetail.jsx'));
 
+const navClass = ({ isActive }) => (isActive ? 'active-link' : 'link');
+
 export default function App() {
   return (
     <>
-      <h1>Lab 4 – Multi-Route SPA</h1>
+      <header className="app-header">
+        <h1>Lab 4 – Multi-Route SPA</h1>
+        <nav className="main-nav" aria-label="Main">
+          <NavLink to="/people" className={navClass}>People</NavLink>
+          <NavLink to="/form" className={navClass}>Form</NavLink>
+        </nav>
+      </header>
       <Routes>
         <Route index element={<Navigate to="/people" replace />} />
         <Route path="people" element={<PeopleLayout people={people} />}>
@@ -24,6 +34,14 @@ export default function App() {
             }
           />
         </Route>
+        <Route
+          path="form"
+          element={
+            <main>
+              <SimpleForm />
+            </main>
+          }
+        />
       </Routes>
     </>
   );

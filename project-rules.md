@@ -57,15 +57,20 @@ Trước mỗi commit: `npm test` ở `client/` và `server/` đều pass; task 
 
 ```js
 export const FormContext = createContext(null);
-export const useFormContext = () => useContext(FormContext);
+export function useFormContext() // = useContext(FormContext); ném lỗi rõ ràng nếu dùng ngoài <SimpleForm>
 ```
 
 **`SimpleForm.jsx`** – `export const SimpleForm`
 
 - `const [values, setValues] = useState(initial);`
 - `const errors = validateForm(values);` – tính **đồng bộ trong render**, `validateForm` là hàm thuần (test riêng được).
-- Bọc UI bằng `<FormContext.Provider value={{ values, errors, handleChange }}>`.
-- Form 3 field: tên, email, tuổi.
+- `const isValid = Object.keys(errors).length === 0;` (slide 14).
+- Bọc UI bằng `<FormContext.Provider value={{ values, errors, isValid, submitAttempted, handleChange }}>`.
+- Form 3 field: tên, email, tuổi. Lỗi chỉ hiển thị sau lần submit đầu (`submitAttempted`), nhưng luôn được tính lại trong mỗi render.
+- Luật `validateForm` (trả `{}` khi hợp lệ):
+  - `name`: bắt buộc, sau khi trim ≥ 2 ký tự.
+  - `email`: bắt buộc, dạng `x@y.z`, không có khoảng trắng.
+  - `age`: bắt buộc, số nguyên, từ 1 đến 120.
 
 **`InputField.jsx`** – `export const InputField = ({ label, error, ...props })`
 

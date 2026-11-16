@@ -17,7 +17,7 @@ Quy trình mỗi task: Contract → Fail test → Implement → Refactor. Mỗi 
   - Commit: `feat: detail route handling`
 
 ## Phase 2 – Sprint 2: Context Form Engine
-- [ ] **T2.1** `FormContext.js` + `SimpleForm.jsx`, validate đồng bộ trong render, không useEffect
+- [x] **T2.1** `FormContext.js` + `SimpleForm.jsx`, validate đồng bộ trong render, không useEffect
   - Done khi: test `validateForm` pass
   - Commit: `feat: form context`
 - [ ] **T2.2** `InputField.jsx`: useId, `aria-invalid`, `aria-describedby`
