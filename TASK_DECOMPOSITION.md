@@ -12,7 +12,7 @@ Quy trình mỗi task: Contract → Fail test → Implement → Refactor. Mỗi 
 - [x] **T1.1** `PeopleLayout.jsx`: NavLink (active class) + Outlet, CSS Grid `minmax(280px, 1fr) 2fr`
   - Done khi: test NavLink/active pass
   - Commit: `feat: router layout`
-- [ ] **T1.2** `PersonDetail.jsx`: useParams + `people.find()` + 404 `role="alert"` + `<dl>`; lazy + Suspense skeleton (`aria-busy`, `aria-live`)
+- [x] **T1.2** `PersonDetail.jsx`: useParams + `people.find()` + 404 `role="alert"` + `<dl>`; lazy + Suspense skeleton (`aria-busy`, `aria-live`)
   - Done khi: test id hợp lệ / 404 pass, build không warning
   - Commit: `feat: detail route handling`
 
