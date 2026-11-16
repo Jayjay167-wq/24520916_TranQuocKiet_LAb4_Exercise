@@ -20,7 +20,7 @@ Quy trình mỗi task: Contract → Fail test → Implement → Refactor. Mỗi 
 - [x] **T2.1** `FormContext.js` + `SimpleForm.jsx`, validate đồng bộ trong render, không useEffect
   - Done khi: test `validateForm` pass
   - Commit: `feat: form context`
-- [ ] **T2.2** `InputField.jsx`: useId, `aria-invalid`, `aria-describedby`
+- [x] **T2.2** `InputField.jsx`: useId, `aria-invalid`, `aria-describedby`
   - Done khi: test aria pass
   - Commit: `feat: input field validation`
 - [ ] **T2.3** `ShowData.jsx` hiển thị `<dl>` khi submit hợp lệ

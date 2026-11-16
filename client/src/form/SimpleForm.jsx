@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FormContext, useFormContext } from './FormContext.js';
 import { validateForm } from './validateForm.js';
+import { InputField } from './InputField.jsx';
 import './SimpleForm.css';
 
 const initial = { name: '', email: '', age: '' };
@@ -42,16 +43,14 @@ export const SimpleForm = () => {
 function FormUI() {
   const { values, errors, submitAttempted, handleChange } = useFormContext();
   return FIELDS.map(({ name, label, ...inputProps }) => (
-    <div key={name} className="field-group">
-      <label htmlFor={`field-${name}`}>{label}</label>
-      <input
-        id={`field-${name}`}
-        name={name}
-        value={values[name]}
-        onChange={handleChange}
-        {...inputProps}
-      />
-      {submitAttempted && errors[name] && <p className="field-error">{errors[name]}</p>}
-    </div>
+    <InputField
+      key={name}
+      label={label}
+      name={name}
+      value={values[name]}
+      onChange={handleChange}
+      error={submitAttempted ? errors[name] : undefined}
+      {...inputProps}
+    />
   ));
 }

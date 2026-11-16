@@ -32,3 +32,9 @@
   color: #fff;
   cursor: pointer;
 }
+
+/* Styled from the aria state, so visual and assistive-tech state cannot drift apart. */
+.field-group input[aria-invalid='true'] {
+  border-color: #b42318;
+  outline-color: #b42318;
+}

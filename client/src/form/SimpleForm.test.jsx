@@ -48,3 +48,24 @@ describe('useFormContext', () => {
     spy.mockRestore();
   });
 });
+
+describe('SimpleForm – fields are InputField with aria wiring', () => {
+  it('marks invalid fields after submit and clears aria-invalid as soon as the value is fixed', async () => {
+    const user = userEvent.setup();
+    render(<SimpleForm />);
+    const name = screen.getByLabelText('Tên');
+    expect(name).toHaveAttribute('aria-invalid', 'false');
+
+    await user.click(screen.getByRole('button', { name: 'Gửi' }));
+    for (const label of ['Tên', 'Email', 'Tuổi']) {
+      expect(screen.getByLabelText(label)).toHaveAttribute('aria-invalid', 'true');
+    }
+    expect(name).toHaveAccessibleDescription('Vui lòng nhập tên');
+    expect(screen.getAllByRole('alert')).toHaveLength(3);
+
+    await user.type(name, 'Ada');
+    expect(name).toHaveAttribute('aria-invalid', 'false');
+    expect(name).not.toHaveAttribute('aria-describedby');
+    expect(screen.getAllByRole('alert')).toHaveLength(2);
+  });
+});
