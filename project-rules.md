@@ -95,13 +95,16 @@ export function useFormContext() // = useContext(FormContext); ném lỗi rõ r�
 
 | Method | Path | Điều kiện | Response |
 |---|---|---|---|
-| GET | `/api/messages/:forum` | – | `200` + mảng message của kênh |
-| POST | `/api/messages/:forum` | thiếu `text` hoặc `author` | `400` + `{ "error": "Missing required fields" }` |
+| GET | `/api/messages/:forum` | – | `200` + mảng message của kênh, cũ → mới |
+| GET / POST | `/api/messages/:forum` | `:forum` không thuộc 3 kênh (phân biệt hoa thường) | `404` + `{ "error": "Unknown forum" }` (kiểm tra trước body) |
+| POST | `/api/messages/:forum` | thiếu `text` hoặc `author`, rỗng / chỉ khoảng trắng / không phải string, không có body, body là mảng | `400` + `{ "error": "Missing required fields" }` |
+| POST | `/api/messages/:forum` | body không phải JSON hợp lệ | `400` + `{ "error": "Invalid JSON body" }` |
 | POST | `/api/messages/:forum` | đủ `text` và `author` | `201` + message mới `{ id, text, author, timestamp }` |
 
-- `id` sinh bằng `crypto.randomUUID()`, `timestamp` là thời điểm server nhận.
-- `app.use(cors({ origin }))` + `express.json()`.
-- Dữ liệu lưu trong memory cho 3 kênh: `nasa`, `esports-tribunal`, `notNasa`.
+- `id` sinh bằng `crypto.randomUUID()`, `timestamp` là ISO string lúc server nhận; `text`/`author` được trim; field lạ trong body bị bỏ.
+- `app.use(cors({ origin: CORS_ORIGIN }))` + `express.json()`; mọi lỗi trả JSON, không trả trang HTML.
+- Dữ liệu lưu trong memory cho 3 kênh: `nasa`, `esports-tribunal`, `notNasa` (`server/src/forums.js`); `npm start` nạp vài message mẫu (`seed.js`), test dùng store rỗng.
+- Config: `PORT` (mặc định 3001, sai định dạng → dừng server với lỗi rõ ràng), `CORS_ORIGIN` (mặc định `http://localhost:5173`).
 
 ### Client – `useForumMessages.js` (slide 26)
 
@@ -125,6 +128,7 @@ export function useFormContext() // = useContext(FormContext); ném lỗi rõ r�
 | Slide 26 fetch `/api/forums/${forumId}/messages`, slide 16 fetch `/api/channels/${channelId}/messages` | Client fetch `/api/messages/${forumId}` | Phải khớp route server ở slide 27; 2 URL trong slide 16/26 không có trên server. |
 | Slide 27 `cors({ origin: 'http://localhost:5173' })` | `origin` đọc từ `CORS_ORIGIN` | Không hardcode config (slide 5, 29). |
 | Slide 27 `{ id: crypto.randomUUID(), ...req.body, timestamp }` | Chỉ lấy `text`, `author` từ body; `id`, `timestamp` do server đặt | Với spread, client gửi `id`/`timestamp` trong body sẽ ghi đè giá trị server sinh ra. |
+| Slide 27 đọc `req.body.text` trực tiếp | `parseMessageInput(req.body)` chịu được `req.body === undefined` | Express 5 để `req.body` là `undefined` khi không có body → code slide trả **500** (đã kiểm chứng). |
 | Slide 27 dùng `require` (CommonJS) | ES modules (`import`) | Đồng nhất với client. |
 | Slide 24 Provider `value={{ values, errors, setValues }}`, phần FormContext ghi `handleChange` | Dùng `handleChange` | Field không cần biết cấu trúc state; một API duy nhất cho mọi field. |
 | Không có trong slide | Kênh ngoài 3 kênh hợp lệ → `404` + `{ "error": "Unknown forum" }` | Lưu trữ memory chỉ có 3 kênh cố định. |

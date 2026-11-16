@@ -28,7 +28,7 @@ Quy trình mỗi task: Contract → Fail test → Implement → Refactor. Mỗi 
   - Commit: `feat: inspector output`
 
 ## Phase 3 – Sprint 3: Full-stack
-- [ ] **T3.1** Express server: CORS, GET/POST `/api/messages/:forum`, POST thiếu field → 400, hợp lệ → 201 (`crypto.randomUUID()`), config từ env
+- [x] **T3.1** Express server: CORS, GET/POST `/api/messages/:forum`, POST thiếu field → 400, hợp lệ → 201 (`crypto.randomUUID()`), config từ env
   - Done khi: test 200/400/201 pass
   - Commit: `feat: express messages api`
 - [ ] **T3.2** Hook `useForumMessages` (AbortController) + trang chuyển kênh `nasa` / `esports-tribunal` / `notNasa`
