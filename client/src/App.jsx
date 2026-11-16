@@ -1,12 +1,17 @@
-import { Routes, Route } from 'react-router';
+import { Routes, Route, Navigate } from 'react-router';
+import PeopleLayout from './people/PeopleLayout.jsx';
+import { people } from './data/people.js';
 
 export default function App() {
   return (
-    <main>
+    <>
       <h1>Lab 4 – Multi-Route SPA</h1>
       <Routes>
-        <Route path="*" element={null} />
+        <Route index element={<Navigate to="/people" replace />} />
+        <Route path="people" element={<PeopleLayout people={people} />}>
+          <Route index element={<p>Chọn một người trong danh sách.</p>} />
+        </Route>
       </Routes>
-    </main>
+    </>
   );
 }

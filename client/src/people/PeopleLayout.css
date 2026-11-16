@@ -1,0 +1,42 @@
+.people-frame {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 2fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar .link,
+.sidebar .active-link {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.sidebar .link:hover,
+.sidebar .link:focus-visible {
+  background: #e6edf3;
+}
+
+.sidebar .active-link {
+  background: #1f6feb;
+  color: #fff;
+  font-weight: 600;
+}
+
+.content-area {
+  min-height: 12rem;
+}
+
+@media (max-width: 640px) {
+  .people-frame {
+    grid-template-columns: 1fr;
+  }
+}

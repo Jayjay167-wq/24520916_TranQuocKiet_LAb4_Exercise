@@ -3,13 +3,13 @@
 Quy trình mỗi task: Contract → Fail test → Implement → Refactor. Mỗi task 1 commit.
 
 ## Phase 0 – Setup
-- [ ] **T0.1** Scaffold `client/` (Vite + React 19, react-router v7, vitest + testing-library) và `server/` (express, cors), proxy `/api` → server
+- [x] **T0.1** Scaffold `client/` (Vite + React 19, react-router v7, vitest + testing-library) và `server/` (express, cors), proxy `/api` → server
   - Commit: `init: scaffold lab 4 multi-route SPA`
-- [ ] **T0.2** `project-rules.md`, `TASK_DECOMPOSITION.md`, `.env.example`
+- [x] **T0.2** `project-rules.md`, `TASK_DECOMPOSITION.md`, `.env.example`
   - Commit: `docs: define contract spec and WBS`
 
 ## Phase 1 – Sprint 1: Router Master-Detail
-- [ ] **T1.1** `PeopleLayout.jsx`: NavLink (active class) + Outlet, CSS Grid `minmax(280px, 1fr) 2fr`
+- [x] **T1.1** `PeopleLayout.jsx`: NavLink (active class) + Outlet, CSS Grid `minmax(280px, 1fr) 2fr`
   - Done khi: test NavLink/active pass
   - Commit: `feat: router layout`
 - [ ] **T1.2** `PersonDetail.jsx`: useParams + `people.find()` + 404 `role="alert"` + `<dl>`; lazy + Suspense skeleton (`aria-busy`, `aria-live`)
