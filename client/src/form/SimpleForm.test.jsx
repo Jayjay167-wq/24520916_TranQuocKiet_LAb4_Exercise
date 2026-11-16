@@ -69,3 +69,63 @@ describe('SimpleForm – fields are InputField with aria wiring', () => {
     expect(screen.getAllByRole('alert')).toHaveLength(2);
   });
 });
+
+describe('SimpleForm – ShowData on submit', () => {
+  const inspector = () => document.querySelector('dl.json-inspector');
+
+  async function fill(user, { name, email, age }) {
+    for (const [label, value] of [['Tên', name], ['Email', email], ['Tuổi', age]]) {
+      const input = screen.getByLabelText(label);
+      await user.clear(input);
+      if (value) await user.type(input, value);
+    }
+  }
+
+  it('does not show the inspector before any submit', () => {
+    render(<SimpleForm />);
+    expect(inspector()).toBeNull();
+  });
+
+  it('does not show the inspector when submit is invalid', async () => {
+    const user = userEvent.setup();
+    render(<SimpleForm />);
+    await fill(user, { name: 'Ada', email: 'not-an-email', age: '36' });
+    await user.click(screen.getByRole('button', { name: 'Gửi' }));
+    expect(inspector()).toBeNull();
+  });
+
+  it('shows the submitted data (trimmed, age as number) after a valid submit', async () => {
+    const user = userEvent.setup();
+    render(<SimpleForm />);
+    await fill(user, { name: '  Ada Lovelace ', email: 'ada@example.com', age: '36' });
+    await user.click(screen.getByRole('button', { name: 'Gửi' }));
+
+    const dl = inspector();
+    expect(dl).not.toBeNull();
+    const defs = [...dl.querySelectorAll('dd')].map((dd) => dd.textContent);
+    expect(defs).toEqual(['Ada Lovelace', 'ada@example.com', '36']);
+    expect(screen.getByRole('heading', { name: 'Dữ liệu đã gửi' })).toBeInTheDocument();
+  });
+
+  it('keeps showing the last submitted snapshot while the user edits, until the next submit', async () => {
+    const user = userEvent.setup();
+    render(<SimpleForm />);
+    await fill(user, { name: 'Ada', email: 'ada@example.com', age: '36' });
+    await user.click(screen.getByRole('button', { name: 'Gửi' }));
+
+    await user.type(screen.getByLabelText('Tên'), 'X');
+    expect(inspector().querySelector('dd').textContent).toBe('Ada');
+  });
+
+  it('hides the inspector again when a later submit is invalid', async () => {
+    const user = userEvent.setup();
+    render(<SimpleForm />);
+    await fill(user, { name: 'Ada', email: 'ada@example.com', age: '36' });
+    await user.click(screen.getByRole('button', { name: 'Gửi' }));
+    expect(inspector()).not.toBeNull();
+
+    await user.clear(screen.getByLabelText('Email'));
+    await user.click(screen.getByRole('button', { name: 'Gửi' }));
+    expect(inspector()).toBeNull();
+  });
+});

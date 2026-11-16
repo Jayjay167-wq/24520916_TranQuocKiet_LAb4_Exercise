@@ -75,12 +75,14 @@ export function useFormContext() // = useContext(FormContext); ném lỗi rõ r�
 **`InputField.jsx`** – `export const InputField = ({ label, error, ...props })`
 
 - `const id = useId(); const errorId = `${id}-error`;`
-- `<label htmlFor={id}>` + `<input id={id} aria-invalid={!!error} aria-describedby={error ? errorId : undefined} {...props} />`.
+- `<label htmlFor={id}>` + `<input {...props} id={id} aria-invalid={!!error} aria-describedby={error ? errorId : undefined} />` – `...props` đặt **trước** để prop truyền vào không ghi đè được `id` / `aria-*`.
 - Có lỗi → `<span id={errorId} role="alert">{error}</span>`; không lỗi thì không render span và không có `aria-describedby`.
 
 **`ShowData.jsx`** – `export const ShowData = ({ data })`
 
-- Chỉ hiển thị sau khi submit hợp lệ.
+- Chỉ hiển thị sau khi submit hợp lệ; submit không hợp lệ thì ẩn (kể cả khi trước đó đã hiện).
+- Dữ liệu là snapshot lúc submit (`name`/`email` đã trim, `age` là number), không đổi theo khi người dùng sửa field cho tới lần submit sau.
+- Bọc trong vùng `aria-live="polite"` có sẵn từ đầu để screen reader đọc kết quả.
 - `<dl className="json-inspector">`, mỗi cặp key/value là `<div key={key} className="data-row"><dt>{key}</dt><dd>{String(val)}</dd></div>`. Không dump `JSON.stringify`.
 
 **Ràng buộc:** **không có `useEffect`** trong thư mục form (slide 13: không chuỗi effect sync state / validate).

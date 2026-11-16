@@ -23,7 +23,7 @@ Quy trình mỗi task: Contract → Fail test → Implement → Refactor. Mỗi 
 - [x] **T2.2** `InputField.jsx`: useId, `aria-invalid`, `aria-describedby`
   - Done khi: test aria pass
   - Commit: `feat: input field validation`
-- [ ] **T2.3** `ShowData.jsx` hiển thị `<dl>` khi submit hợp lệ
+- [x] **T2.3** `ShowData.jsx` hiển thị `<dl>` khi submit hợp lệ
   - Done khi: test submit pass, thư mục form không có useEffect
   - Commit: `feat: inspector output`
 

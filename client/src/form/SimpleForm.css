@@ -38,3 +38,40 @@
   border-color: #b42318;
   outline-color: #b42318;
 }
+
+.inspector {
+  margin-top: 1.5rem;
+  max-width: 28rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid #c2ccd6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.inspector h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.json-inspector {
+  display: grid;
+  gap: 0.375rem;
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+}
+
+.json-inspector .data-row {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: 0.75rem;
+}
+
+.json-inspector dt {
+  color: #52606d;
+}
+
+.json-inspector dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
